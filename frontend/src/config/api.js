@@ -1,7 +1,8 @@
 // API Configuration for different environments
 const API_CONFIG = {
   development: {
-    baseURL: 'http://localhost:5000',
+    // Use deployed backend even in development since local backend isn't running
+    baseURL: import.meta.env.VITE_API_URL || 'https://gameai-mh5p.onrender.com',
   },
   production: {
     baseURL: import.meta.env.VITE_API_URL || 'https://gameai-mh5p.onrender.com',
