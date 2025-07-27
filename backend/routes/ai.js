@@ -377,76 +377,12 @@ router.get('/popular-games', async (req, res) => {
     const dayOfWeek = new Date().getDay();
     const month = new Date().getMonth();
     
-    const prompt = `You are a dynamic gaming curator. Generate 8 completely different games each time, ensuring maximum variety and freshness. Never repeat the same games.
+    const prompt = `Generate 6 popular games in valid JSON. Use real game titles only.
 
-Context: ${currentTime}, Seed: ${randomSeed}, Hour: ${timeOfDay}, Day: ${dayOfWeek}, Month: ${month}
+GAMES: Cyberpunk 2077, Elden Ring, God of War, The Witcher 3, Red Dead Redemption 2, Minecraft, Fortnite, Call of Duty, Assassin's Creed, Spider-Man, Horizon Zero Dawn, Ghost of Tsushima, The Last of Us, Dark Souls, Sekiro, Bloodborne, Doom, Mortal Kombat, Street Fighter, Grand Theft Auto V, Apex Legends, Overwatch, Valorant, FIFA, Forza Horizon, Hollow Knight, Celeste, Hades, Resident Evil, Counter-Strike, League of Legends, Destiny 2, Fall Guys, Among Us, Rocket League, Rainbow Six Siege, Diablo, PUBG, Gears of War, Halo Infinite
 
-IMPORTANT: Use ONLY real popular game titles (90%) with minimal fictional games (10%). 
-
-MUST USE these exact real game titles:
-- Cyberpunk 2077, Elden Ring, God of War, The Witcher 3, Red Dead Redemption 2
-- Minecraft, Fortnite, Call of Duty, Assassin's Creed, Spider-Man
-- Horizon Zero Dawn, Ghost of Tsushima, The Last of Us, Dark Souls, Sekiro
-- Bloodborne, Doom, Mortal Kombat, Street Fighter, Tekken
-- Grand Theft Auto V, Apex Legends, Overwatch, Valorant
-- FIFA, NBA 2K, Forza Horizon, Gran Turismo, Civilization VI
-- Hollow Knight, Celeste, Hades, Resident Evil, Silent Hill
-- Final Fantasy, Mass Effect, Skyrim, Fallout, Destiny 2
-- Counter-Strike, League of Legends, Dota 2, World of Warcraft
-- Borderlands, Batman Arkham, Metal Gear Solid, Uncharted, Tomb Raider
-
-Genres (pick 8 different): Action RPG, Tactical Shooter, Survival Horror, Racing Sim, City Builder, Roguelike, Platformer, Fighting, RTS, Battle Royale, Puzzle, Metroidvania, JRPG, Western RPG, Stealth, Sports, MMO, Card Game, Visual Novel, Sandbox, Tower Defense, Rhythm, Simulation, Adventure
-
-Time-based variety:
-- Morning (6-12): Include productivity/simulation games
-- Afternoon (12-18): Mix action and strategy games  
-- Evening (18-24): Include story-rich and multiplayer games
-- Night (0-6): Add horror and atmospheric games
-
-Seasonal themes (Month ${month}):
-- Winter: Cozy games, holiday themes
-- Spring: Adventure, exploration games
-- Summer: Action, multiplayer games
-- Fall: Horror, atmospheric games
-
-Generate games (mix of real popular games and realistic fictional ones):
-
-{
-  "games": [
-    {
-      "title": "MUST use these exact real game titles: Cyberpunk 2077, Elden Ring, God of War, The Witcher 3, Red Dead Redemption 2, Minecraft, Fortnite, Call of Duty, Assassin's Creed, Spider-Man, Horizon Zero Dawn, Ghost of Tsushima, The Last of Us, Dark Souls, Sekiro, Bloodborne, Doom, Mortal Kombat, Street Fighter, Grand Theft Auto V, Apex Legends, Overwatch, Valorant, FIFA, Forza Horizon, Hollow Knight, Celeste, Hades, Resident Evil, Counter-Strike, League of Legends, Destiny 2, Fall Guys, Among Us, Rocket League, Rainbow Six Siege, Diablo, PUBG, Gears of War, Halo Infinite",
-      "description": "Engaging 2-3 sentence description that makes this game sound exciting and unique",
-      "genre": "Specific genre that fits the time/season context",
-      "platform": ["Realistic platform mix - vary between PC, PS5, Xbox Series X/S, Switch"],
-      "releaseDate": "Varied dates 2019-${currentYear} in YYYY-MM-DD format",
-      "rating": "Realistic rating 6.8-9.2 with variety",
-      "developer": "Believable developer name (mix AAA studios and indie teams)",
-      "publisher": "Realistic publisher name",
-      "coverImage": "",
-      "tags": ["5-6 specific, varied gameplay/theme tags"],
-      "metacriticScore": "Score 68-93 that matches rating",
-      "esrbRating": "Appropriate E/T/M rating",
-      "downloadLinks": [
-        {"platform": "PC", "storeName": "Steam", "url": "https://store.steampowered.com", "price": "Varied $12-65", "size": "Varied 3GB-85GB", "type": "steam"},
-        {"platform": "PC", "storeName": "Epic Games Store", "url": "https://store.epicgames.com", "price": "Similar price ±$5", "size": "Same size", "type": "epic"},
-        {"platform": "PC", "storeName": "GOG", "url": "https://gog.com", "price": "Competitive price", "size": "Same size", "type": "gog"}
-      ]
-    }
-  ]
-}
-
-CRITICAL: 
-- Each game must be completely different from previous generations
-- Use the time/date context to create themed variety  
-- Make titles creative but believable
-- Return ONLY valid JSON with no markdown, no comments, no extra text
-- Ensure all strings are properly quoted and escaped
-- No trailing commas in arrays or objects
-
-EXAMPLE FORMAT:
-{"games":[{"title":"Game Name","description":"Description","genre":"Genre","platform":["PC"],"releaseDate":"2024-01-01","rating":"8.5","developer":"Dev","publisher":"Pub","coverImage":"","tags":["tag1"],"metacriticScore":"85","esrbRating":"M","downloadLinks":[{"platform":"PC","storeName":"Steam","url":"https://store.steampowered.com","price":"$60","size":"50GB","type":"steam"}]}]}
-
-Return only the JSON object, nothing else.`;
+Return only valid JSON:
+{"games":[{"title":"Real Game Title","description":"Brief description","genre":"Genre","platform":["PC","PlayStation 5"],"releaseDate":"2023-01-01","rating":"8.5","developer":"Developer","publisher":"Publisher","coverImage":"","tags":["tag1","tag2"],"metacriticScore":"85","esrbRating":"M","downloadLinks":[{"platform":"PC","storeName":"Steam","url":"https://store.steampowered.com","price":"$60","size":"50GB","type":"steam"}]}]}`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -458,28 +394,59 @@ Return only the JSON object, nothing else.`;
     try {
       let jsonStr = text.trim();
       
-      // Remove markdown code blocks
-      jsonStr = jsonStr.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+      // Remove markdown code blocks and clean up
+      jsonStr = jsonStr.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       
-      // Find the JSON object
-      const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
+      // Find the JSON object - look for complete structure
+      let jsonMatch = jsonStr.match(/\{"games"\s*:\s*\[[\s\S]*?\]\s*\}/);
+      
       if (!jsonMatch) {
-        throw new Error('No JSON object found in AI response');
+        // Try to find just the games array and wrap it
+        const gamesArrayMatch = jsonStr.match(/"games"\s*:\s*\[([\s\S]*?)\]/);
+        if (gamesArrayMatch) {
+          jsonStr = `{"games":${gamesArrayMatch[0].split(':')[1]}}`;
+          jsonMatch = [jsonStr];
+        } else {
+          throw new Error('No valid JSON structure found in AI response');
+        }
       }
       
       let cleanJson = jsonMatch[0];
       
-      // Fix common JSON issues
+      // More aggressive JSON cleaning
       cleanJson = cleanJson
+        // Fix truncated JSON - if it ends abruptly, try to close it
+        .replace(/,\s*$/, '')  // Remove trailing comma at end
+        .replace(/"\s*$/, '"}]') // Close truncated string and array
+        .replace(/\{\s*$/, '') // Remove incomplete objects
+        // Standard cleaning
         .replace(/,(\s*[}\]])/g, '$1') // Remove trailing commas
         .replace(/([{,]\s*)(\w+):/g, '$1"$2":') // Quote unquoted keys
-        .replace(/:\s*'([^']*)'/g, ': "$1"') // Replace single quotes with double quotes
+        .replace(/:\s*'([^']*)'/g, ': "$1"') // Replace single quotes
         .replace(/\n/g, ' ') // Remove newlines
         .replace(/\s+/g, ' ') // Normalize whitespace
         .replace(/,\s*}/g, '}') // Remove trailing commas before closing braces
         .replace(/,\s*]/g, ']') // Remove trailing commas before closing brackets
+        // Fix common truncation issues
         .replace(/"\s*:\s*"([^"]*)"([^,}\]]*)/g, '": "$1$2"') // Fix broken strings
         .replace(/([^\\])\\([^"\\\/bfnrt])/g, '$1\\\\$2'); // Escape unescaped backslashes
+      
+      // Ensure proper closing
+      if (!cleanJson.endsWith('}')) {
+        // Count opening and closing braces/brackets to fix structure
+        const openBraces = (cleanJson.match(/\{/g) || []).length;
+        const closeBraces = (cleanJson.match(/\}/g) || []).length;
+        const openBrackets = (cleanJson.match(/\[/g) || []).length;
+        const closeBrackets = (cleanJson.match(/\]/g) || []).length;
+        
+        // Add missing closing brackets and braces
+        for (let i = 0; i < openBrackets - closeBrackets; i++) {
+          cleanJson += ']';
+        }
+        for (let i = 0; i < openBraces - closeBraces; i++) {
+          cleanJson += '}';
+        }
+      }
       
       console.log('🔧 Attempting to parse cleaned JSON...');
       const gamesData = JSON.parse(cleanJson);
@@ -509,12 +476,12 @@ Return only the JSON object, nothing else.`;
         const gamesMatch = text.match(/"games"\s*:\s*\[([\s\S]*?)\]/);
         if (gamesMatch) {
           console.log('🔄 Attempting manual games extraction...');
-          // Return a simplified fallback response
+          // Return a comprehensive fallback response with popular games
           const fallbackGames = {
             games: [
               {
                 title: "Cyberpunk 2077",
-                description: "An open-world, action-adventure story set in Night City.",
+                description: "An open-world, action-adventure story set in Night City, a megalopolis obsessed with power, glamour and body modification.",
                 genre: "Action RPG",
                 platform: ["PC", "PlayStation 5", "Xbox Series X/S"],
                 releaseDate: "2020-12-10",
@@ -522,11 +489,62 @@ Return only the JSON object, nothing else.`;
                 developer: "CD Projekt RED",
                 publisher: "CD Projekt",
                 coverImage: "",
-                tags: ["cyberpunk", "rpg", "open-world"],
+                tags: ["cyberpunk", "rpg", "open-world", "futuristic", "story-rich"],
                 metacriticScore: 86,
                 esrbRating: "M",
                 downloadLinks: [
                   {"platform": "PC", "storeName": "Steam", "url": "https://store.steampowered.com", "price": "$59.99", "size": "70GB", "type": "steam"}
+                ]
+              },
+              {
+                title: "Elden Ring",
+                description: "Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between.",
+                genre: "Action RPG",
+                platform: ["PC", "PlayStation 5", "Xbox Series X/S"],
+                releaseDate: "2022-02-25",
+                rating: 9.2,
+                developer: "FromSoftware",
+                publisher: "Bandai Namco Entertainment",
+                coverImage: "",
+                tags: ["souls-like", "fantasy", "open-world", "challenging", "exploration"],
+                metacriticScore: 96,
+                esrbRating: "M",
+                downloadLinks: [
+                  {"platform": "PC", "storeName": "Steam", "url": "https://store.steampowered.com", "price": "$59.99", "size": "50GB", "type": "steam"}
+                ]
+              },
+              {
+                title: "God of War",
+                description: "His vengeance against the Gods of Olympus years behind him, Kratos now lives as a man in the realm of Norse Gods and monsters.",
+                genre: "Action Adventure",
+                platform: ["PC", "PlayStation 5"],
+                releaseDate: "2022-01-14",
+                rating: 9.1,
+                developer: "Santa Monica Studio",
+                publisher: "Sony Interactive Entertainment",
+                coverImage: "",
+                tags: ["mythology", "action", "story-rich", "adventure", "combat"],
+                metacriticScore: 94,
+                esrbRating: "M",
+                downloadLinks: [
+                  {"platform": "PC", "storeName": "Steam", "url": "https://store.steampowered.com", "price": "$49.99", "size": "70GB", "type": "steam"}
+                ]
+              },
+              {
+                title: "The Witcher 3: Wild Hunt",
+                description: "As war rages on throughout the Northern Realms, you take on the greatest contract of your life — tracking down the Child of Prophecy.",
+                genre: "RPG",
+                platform: ["PC", "PlayStation 5", "Xbox Series X/S", "Nintendo Switch"],
+                releaseDate: "2015-05-19",
+                rating: 9.3,
+                developer: "CD Projekt RED",
+                publisher: "CD Projekt",
+                coverImage: "",
+                tags: ["fantasy", "rpg", "open-world", "story-rich", "choices-matter"],
+                metacriticScore: 93,
+                esrbRating: "M",
+                downloadLinks: [
+                  {"platform": "PC", "storeName": "Steam", "url": "https://store.steampowered.com", "price": "$39.99", "size": "50GB", "type": "steam"}
                 ]
               }
             ]
