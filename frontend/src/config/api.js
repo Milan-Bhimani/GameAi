@@ -4,7 +4,7 @@ const API_CONFIG = {
     baseURL: 'http://localhost:5000',
   },
   production: {
-    baseURL: import.meta.env.VITE_API_URL || 'https://your-render-backend-url.onrender.com',
+    baseURL: import.meta.env.VITE_API_URL || 'https://gameai-mh5p.onrender.com',
   }
 };
 

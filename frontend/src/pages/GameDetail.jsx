@@ -75,7 +75,7 @@ const GameDetail = () => {
       const response = await axios.post("/api/ai/download-links", {
         gameTitle: game.title,
         platforms: game.platform,
-      });
+      }, axiosConfig);
 
       if (
         response.data.downloadLinks &&

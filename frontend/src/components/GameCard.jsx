@@ -69,7 +69,7 @@ const GameCard = ({ game }) => {
         genre: game.genre,
         description: game.description,
         style: 'realistic'
-      });
+      }, axiosConfig);
       
       if (response.data.unsplash) {
         setCurrentImage(response.data.unsplash);
@@ -381,7 +381,7 @@ const GameCard = ({ game }) => {
                 const response = await axios.post('/api/ai/download-links', {
                   gameTitle: game.title,
                   platforms: game.platform
-                });
+                }, axiosConfig);
                 
                 if (response.data.downloadLinks && response.data.downloadLinks.length > 0) {
                   const firstLink = response.data.downloadLinks[0];

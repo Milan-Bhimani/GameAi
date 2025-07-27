@@ -55,19 +55,9 @@ Visit your backend URL - you should see:
 ## 🎯 Frontend Deployment on Vercel
 
 ### Step 1: Update API Configuration
-1. Update `frontend/src/config/api.js`:
-   ```javascript
-   const API_CONFIG = {
-     development: {
-       baseURL: 'http://localhost:5000',
-     },
-     production: {
-       baseURL: 'https://your-actual-render-backend-url.onrender.com',
-     }
-   };
-   ```
-
-2. Replace `your-actual-render-backend-url` with your actual Render URL
+✅ **Already Updated!** The API configuration now points to:
+- **Backend URL**: `https://gameai-mh5p.onrender.com`
+- **Environment**: Production ready
 
 ### Step 2: Deploy on Vercel
 1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
@@ -83,7 +73,7 @@ Visit your backend URL - you should see:
 ### Step 3: Set Environment Variables
 In Vercel dashboard, add these environment variables:
 ```
-VITE_API_URL=https://your-actual-render-backend-url.onrender.com
+VITE_API_URL=https://gameai-mh5p.onrender.com
 VITE_NODE_ENV=production
 ```
 

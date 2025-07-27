@@ -16,7 +16,7 @@ const AIGameAnalysis = ({ gameTitle, gameDescription, onClose }) => {
       const response = await axios.post('/api/ai/analyze-game', {
         gameTitle,
         gameDescription
-      });
+      }, axiosConfig);
 
       if (response.data.analysis) {
         setAnalysis(response.data.analysis);
