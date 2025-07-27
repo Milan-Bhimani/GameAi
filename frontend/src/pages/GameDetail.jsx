@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { axiosConfig } from '../config/api';
 import AIGameAnalysis from "../components/AIGameAnalysis";
 import { generatePlaceholderImage } from "../utils/placeholderImage";
 import {
@@ -33,7 +34,8 @@ const GameDetail = () => {
       try {
         console.log(`🤖 Fetching AI details for: ${title}`);
         const response = await axios.get(
-          `/api/ai/game/${encodeURIComponent(title)}`
+          `/api/ai/game/${encodeURIComponent(title)}`,
+          axiosConfig
         );
         setGame(response.data);
         console.log(`✅ AI details loaded for: ${title}`);
@@ -49,7 +51,8 @@ const GameDetail = () => {
       try {
         console.log(`🤖 Fetching real-time insights for: ${title}`);
         const response = await axios.get(
-          `/api/ai/game-insights/${encodeURIComponent(title)}`
+          `/api/ai/game-insights/${encodeURIComponent(title)}`,
+          axiosConfig
         );
         setInsights(response.data.insights);
         console.log(`✅ Real-time insights loaded for: ${title}`);
@@ -554,7 +557,8 @@ const GameDetail = () => {
                   setInsightsLoading(true);
                   try {
                     const response = await axios.get(
-                      `/api/ai/game-insights/${encodeURIComponent(title)}`
+                      `/api/ai/game-insights/${encodeURIComponent(title)}`,
+                      axiosConfig
                     );
                     setInsights(response.data.insights);
                   } catch (error) {

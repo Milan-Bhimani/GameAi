@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { axiosConfig } from '../config/api';
 import GameCard from '../components/GameCard';
 import { Bot, Sparkles } from 'lucide-react';
 

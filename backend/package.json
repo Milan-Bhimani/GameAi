@@ -8,7 +8,12 @@
     "dev": "nodemon server.js",
     "seed": "node seed.js",
     "ai-seed": "node ai-seed.js",
+    "build": "echo 'No build step required for backend'",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

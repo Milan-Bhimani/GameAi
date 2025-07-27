@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { axiosConfig } from '../config/api';
 
 // Generate AI-powered game images on the frontend
 export const generateGameImage = async (gameTitle, genre, description, style = 'realistic') => {
@@ -8,7 +9,7 @@ export const generateGameImage = async (gameTitle, genre, description, style = '
       genre,
       description,
       style
-    });
+    }, axiosConfig);
     
     return response.data;
   } catch (error) {

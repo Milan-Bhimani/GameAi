@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { axiosConfig } from '../config/api';
 import { X, Bot, CheckCircle, AlertTriangle, Users, Gamepad2, Star, Clock, BarChart3, RotateCcw } from 'lucide-react';
 
 const AIGameAnalysis = ({ gameTitle, gameDescription, onClose }) => {

@@ -8,6 +8,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Health check endpoint
+app.get('/', (req, res) => {
+  res.json({
+    message: '🎮 GameAI Backend API is running!',
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    version: '1.0.0'
+  });
+});
+
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Routes
 app.use('/api/ai', require('./routes/ai'));
 

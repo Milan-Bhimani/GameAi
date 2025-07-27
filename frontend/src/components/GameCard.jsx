@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Star, User, Download, ExternalLink, RefreshCw } from 'lucide-react';
 import axios from 'axios';
+import { axiosConfig } from '../config/api';
 import { generatePlaceholderImage } from '../utils/placeholderImage';
 import { loadGameImage, generateFallbackImage } from '../utils/imageGeneration';
 

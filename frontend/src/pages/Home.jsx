@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { axiosConfig } from '../config/api';
 import GameCard from '../components/GameCard';
 import LandingHome from './LandingHome';
 import { Sparkles, Zap, RefreshCw, Bot, Gamepad2, TrendingUp } from 'lucide-react';
@@ -29,7 +30,7 @@ const Home = () => {
       console.log('🤖 Fetching AI-generated games...');
       setAiLoading(true);
       
-      const response = await axios.get('/api/ai/popular-games');
+      const response = await axios.get('/api/ai/popular-games', axiosConfig);
       if (response.data.games && response.data.games.length > 0) {
         setGames(response.data.games);
         setFilteredGames(response.data.games);
@@ -56,7 +57,7 @@ const Home = () => {
       console.log('🤖 Fetching trending games...');
       setTrendingLoading(true);
       
-      const response = await axios.get('/api/ai/trending-games');
+      const response = await axios.get('/api/ai/trending-games', axiosConfig);
       if (response.data.trending && response.data.trending.length > 0) {
         setTrendingGames(response.data.trending);
         console.log(`✅ Loaded ${response.data.trending.length} trending games`);
