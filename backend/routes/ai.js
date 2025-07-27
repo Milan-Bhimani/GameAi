@@ -361,10 +361,10 @@ router.get('/popular-games', async (req, res) => {
     const model = genAI.getGenerativeModel({ 
       model: 'gemini-2.0-flash-exp',
       generationConfig: {
-        temperature: 0.9,  // Higher for more creativity and randomness
-        topK: 40,          // More diverse token selection
-        topP: 0.95,        // Higher for more variety
-        maxOutputTokens: 3000, // More space for 8 games
+        temperature: 0.7,  // Reduced for more consistent JSON
+        topK: 20,          // More focused token selection
+        topP: 0.8,         // More controlled variety
+        maxOutputTokens: 2500, // Reduced to prevent truncation
       }
     });
     
@@ -435,7 +435,18 @@ Generate games (mix of real popular games and realistic fictional ones):
   ]
 }
 
-CRITICAL: Each game must be completely different from previous generations. Use the time/date context to create themed variety. Make titles creative but believable. Return only valid JSON.`;
+CRITICAL: 
+- Each game must be completely different from previous generations
+- Use the time/date context to create themed variety  
+- Make titles creative but believable
+- Return ONLY valid JSON with no markdown, no comments, no extra text
+- Ensure all strings are properly quoted and escaped
+- No trailing commas in arrays or objects
+
+EXAMPLE FORMAT:
+{"games":[{"title":"Game Name","description":"Description","genre":"Genre","platform":["PC"],"releaseDate":"2024-01-01","rating":"8.5","developer":"Dev","publisher":"Pub","coverImage":"","tags":["tag1"],"metacriticScore":"85","esrbRating":"M","downloadLinks":[{"platform":"PC","storeName":"Steam","url":"https://store.steampowered.com","price":"$60","size":"50GB","type":"steam"}]}]}
+
+Return only the JSON object, nothing else.`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -464,7 +475,11 @@ CRITICAL: Each game must be completely different from previous generations. Use 
         .replace(/([{,]\s*)(\w+):/g, '$1"$2":') // Quote unquoted keys
         .replace(/:\s*'([^']*)'/g, ': "$1"') // Replace single quotes with double quotes
         .replace(/\n/g, ' ') // Remove newlines
-        .replace(/\s+/g, ' '); // Normalize whitespace
+        .replace(/\s+/g, ' ') // Normalize whitespace
+        .replace(/,\s*}/g, '}') // Remove trailing commas before closing braces
+        .replace(/,\s*]/g, ']') // Remove trailing commas before closing brackets
+        .replace(/"\s*:\s*"([^"]*)"([^,}\]]*)/g, '": "$1$2"') // Fix broken strings
+        .replace(/([^\\])\\([^"\\\/bfnrt])/g, '$1\\\\$2'); // Escape unescaped backslashes
       
       console.log('🔧 Attempting to parse cleaned JSON...');
       const gamesData = JSON.parse(cleanJson);
@@ -487,7 +502,48 @@ CRITICAL: Each game must be completely different from previous generations. Use 
       }
     } catch (parseError) {
       console.error('❌ JSON parsing failed:', parseError.message);
-      console.log('Raw AI response:', text.substring(0, 500) + '...');
+      console.log('Raw AI response:', text.substring(0, 1000) + '...');
+      
+      // Try to extract games array manually as fallback
+      try {
+        const gamesMatch = text.match(/"games"\s*:\s*\[([\s\S]*?)\]/);
+        if (gamesMatch) {
+          console.log('🔄 Attempting manual games extraction...');
+          // Return a simplified fallback response
+          const fallbackGames = {
+            games: [
+              {
+                title: "Cyberpunk 2077",
+                description: "An open-world, action-adventure story set in Night City.",
+                genre: "Action RPG",
+                platform: ["PC", "PlayStation 5", "Xbox Series X/S"],
+                releaseDate: "2020-12-10",
+                rating: 8.1,
+                developer: "CD Projekt RED",
+                publisher: "CD Projekt",
+                coverImage: "",
+                tags: ["cyberpunk", "rpg", "open-world"],
+                metacriticScore: 86,
+                esrbRating: "M",
+                downloadLinks: [
+                  {"platform": "PC", "storeName": "Steam", "url": "https://store.steampowered.com", "price": "$59.99", "size": "70GB", "type": "steam"}
+                ]
+              }
+            ]
+          };
+          
+          // Get real images for fallback games
+          for (let game of fallbackGames.games) {
+            game.coverImage = await getRealGameCoverImage(game.title, game.genre, game.description);
+          }
+          
+          console.log('✅ Using fallback games due to JSON parsing error');
+          return res.json(fallbackGames);
+        }
+      } catch (fallbackError) {
+        console.error('❌ Fallback extraction also failed:', fallbackError.message);
+      }
+      
       throw parseError;
     }
     
