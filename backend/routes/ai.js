@@ -85,8 +85,8 @@ const getCuratedGameImage = (gameTitle, genre) => {
   // Real game cover images from popular games
   const gameImages = {
     // Action Games
-    'cyberpunk 2077': 'https://image.api.playstation.com/vulcan/ap/rnd/202111/3013/cKZ4tKNNjvlktOHOGOOBDfGS.png',
-    'cyberpunk': 'https://image.api.playstation.com/vulcan/ap/rnd/202111/3013/cKZ4tKNNjvlktOHOGOOBDfGS.png',
+    'cyberpunk 2077': 'https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg',
+    'cyberpunk': 'https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg',
     'witcher 3': 'https://image.api.playstation.com/vulcan/img/rnd/202211/0711/kh4MrqZQXajNNWYSdAzN2Dqe.png',
     'the witcher 3': 'https://image.api.playstation.com/vulcan/img/rnd/202211/0711/kh4MrqZQXajNNWYSdAzN2Dqe.png',
     'red dead redemption 2': 'https://image.api.playstation.com/vulcan/ap/rnd/201812/0717/4315lKZWZrJNIxVdqiJp2QZv.png',
@@ -120,7 +120,7 @@ const getCuratedGameImage = (gameTitle, genre) => {
     'hades': 'https://image.api.playstation.com/vulcan/ap/rnd/202104/0517/9AcM3vy5t77zPiJyKHwRfnNT.png',
     
     // Multiplayer Games
-    'apex legends': 'https://image.api.playstation.com/vulcan/ap/rnd/201902/0411/RuKzyU97RHuAXbAfAvHMbz0w.png',
+    'apex legends': 'https://cdn.akamai.steamstatic.com/steam/apps/1172470/header.jpg',
     'overwatch': 'https://image.api.playstation.com/vulcan/ap/rnd/201605/1018/2c4eaKvJJmau8hrzaKqeqGbH.png',
     'valorant': 'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt5a87d9e4b8cf8c5d/5eb7cdc1b537290d4c8b4c0c/V_AGENTS_587x900_Jett.jpg',
     
@@ -210,14 +210,14 @@ const getCuratedGameImage = (gameTitle, genre) => {
   
   // Genre-based fallback images
   const genreImages = {
-    'action': 'https://image.api.playstation.com/vulcan/ap/rnd/202111/3013/cKZ4tKNNjvlktOHOGOOBDfGS.png',
+    'action': 'https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg',
     'rpg': 'https://image.api.playstation.com/vulcan/ap/rnd/202110/2000/phvVT0qZfcRms5qDAk0SI3CM.png',
     'horror': 'https://image.api.playstation.com/vulcan/ap/rnd/202101/0812/FkzwjnJknkrFlozkTdeQBMub.png',
     'racing': 'https://compass-ssl.xbox.com/assets/d4/6e/d46e7ca3-150b-4b8e-9960-48c8c8c8c8c8/ForzaHorizon5_KeyArt_16x9_RGB.jpg',
     'strategy': 'https://image.api.playstation.com/vulcan/ap/rnd/201909/0913/cAJqHjJsOdGqJgHTTHaJmJgv.png',
     'sports': 'https://image.api.playstation.com/vulcan/ap/rnd/202208/1007/dR9KJAKDW2duPANP6Nv2maDG.png',
     'indie': 'https://image.api.playstation.com/vulcan/ap/rnd/201706/2000/B2aUYFC0qUAkNVnjqUqvtGBq.png',
-    'shooter': 'https://image.api.playstation.com/vulcan/ap/rnd/201902/0411/RuKzyU97RHuAXbAfAvHMbz0w.png',
+    'shooter': 'https://cdn.akamai.steamstatic.com/steam/apps/1172470/header.jpg',
     'platformer': 'https://image.api.playstation.com/vulcan/ap/rnd/201801/2322/DhGsKODUjKHV8wJAKKSVnJai.png',
     'simulation': 'https://image.api.playstation.com/vulcan/ap/rnd/201909/0913/cAJqHjJsOdGqJgHTTHaJmJgv.png'
   };
@@ -231,7 +231,7 @@ const getCuratedGameImage = (gameTitle, genre) => {
   
   // Default fallback
   console.log(`🎮 Using default game image for "${title}"`);
-  return 'https://image.api.playstation.com/vulcan/ap/rnd/202111/3013/cKZ4tKNNjvlktOHOGOOBDfGS.png';
+  return 'https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg';
 };
 
 // Extract relevant keywords for image generation

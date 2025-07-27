@@ -455,26 +455,28 @@ const AISuggestions = () => {
               <div key={index} style={{ position: "relative" }}>
                 <GameCard game={suggestion} />
 
-                {/* Enhanced AI Recommendation Badge */}
+                {/* Enhanced AI Recommendation Badge - Positioned below genre badge */}
                 <div
                   style={{
                     position: "absolute",
-                    top: "16px",
+                    top: "60px", // Moved down to avoid overlap with genre badge
                     left: "16px",
-                    background: "var(--gradient-primary)",
+                    background: "linear-gradient(135deg, #ec4899, #f97316)",
                     color: "white",
-                    padding: "8px 12px",
-                    borderRadius: "20px",
-                    fontSize: "12px",
+                    padding: "6px 10px",
+                    borderRadius: "16px",
+                    fontSize: "11px",
                     fontWeight: "600",
                     display: "flex",
                     alignItems: "center",
-                    gap: "6px",
-                    boxShadow: "var(--shadow-primary)",
+                    gap: "4px",
+                    boxShadow: "0 4px 12px rgba(236, 72, 153, 0.4)",
                     zIndex: 10,
+                    backdropFilter: "blur(10px)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
                   }}
                 >
-                  <Bot size={12} />
+                  <Bot size={10} />
                   AI Pick
                 </div>
 
